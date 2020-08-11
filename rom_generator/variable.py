@@ -8,6 +8,7 @@ counter = 0
 
 
 def getOpenVariable():
+    '''This gets the most youngest open variable'''
     global ar, counter
     while(ar[counter]):
         counter = counter + 1
@@ -16,6 +17,7 @@ def getOpenVariable():
     return counter
 
 def deprecatedVariable(index):
+    '''This deprecates a variable when its no longer in use'''
     global ar, counter
     ar[index] = False
     if index < counter:
