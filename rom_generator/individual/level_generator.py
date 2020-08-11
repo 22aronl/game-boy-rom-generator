@@ -1,9 +1,11 @@
 import argparse
 import copy
 import random
-from generator import makeBasicProject, addSpriteSheet, makeBackground, makeScene, makeActor, addSymmetricSceneConnections, makeMusic, reverse_direction, initializeGenerator, writeProjectToDisk, makeKey, makeLock
-from script_functions import actorHide, end
-import combat as combat
+from rom_generator.generator import makeBasicProject, addSpriteSheet, makeBackground, makeScene, makeActor, addSymmetricSceneConnections, makeMusic, reverse_direction, initializeGenerator, writeProjectToDisk, makeKey, makeLock
+from rom_generator.script_functions import actorHide, end
+import rom_generator.combat as combat
+import rom_generator.roomGen as roomGen
+import rom_generator.roomGen2 as roomGen2
 def AnikaProject123():
     """
     This is my change
@@ -76,12 +78,16 @@ def aaronTest():
             makeScene(f"Scene {1}", default_bkg))
 
     key = makeActor(a_rock_sprite, 2, 2)
+    key2 = makeActor(a_rock_sprite, 3, 3)
+    key3 = makeActor(a_rock_sprite, 7, 7)
 
     weapon = makeActor(doorway_sprite, 5, 5)
 
-    combat.setUpScene(a_scene, weapon, player_sprite_sheet["id"], [key])
+    combat.setUpScene(a_scene, weapon, player_sprite_sheet["id"], [key, key2, key3])
 
     a_scene["actors"].append(key)
+    a_scene["actors"].append(key2)
+    a_scene["actors"].append(key3)
     a_scene["actors"].append(weapon)
 
     project.scenes.append(copy.deepcopy(a_scene))
@@ -212,6 +218,10 @@ def createRockWorld():
     project.settings["startSceneId"] = project.scenes[0]["id"]
     return project
 
+def grammarTest():
+    return roomGen2.makeGame()
+    
+
 
 # Utilities
 class bcolors:
@@ -227,14 +237,18 @@ class bcolors:
 
 # Run the generator
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Generate a Game Boy ROM via a GB Studio project file.")
-    parser.add_argument('--destination', '-d', type=str, help="destination folder name", default="../gbprojects/projects2/")
+    parser = argparse.ArgumentParser(
+        description="Generate a Game Boy ROM via a GB Studio project file.")
+    parser.add_argument('--destination', '-d', type=str,
+                        help="destination folder name", default="../gbprojects/projects2/")
     args = parser.parse_args()
 
     initializeGenerator()
-    project = aaronTest()
+    project = grammarTest()
     writeProjectToDisk(project, output_path=args.destination)
 
     if args.destination == "../gbprojects/projects/":
         print(f"{bcolors.WARNING}NOTE: Used default output directory, change with the -d flag{bcolors.ENDC}")
         print(f"{bcolors.OKBLUE}See generate.py --help for more options{bcolors.ENDC}")
+
+
